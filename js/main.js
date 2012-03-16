@@ -4,7 +4,7 @@ var gameRunning = false
 
 var mainLoopDelay = 10
 var moto = new Image()
-
+ 
 function init(){
     initSettings();
     loadImages();
