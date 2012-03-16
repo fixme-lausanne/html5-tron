@@ -1,5 +1,28 @@
 var keys = [];
 
+var player = function(){
+	this.object = null;
+	this.canJump = false;
+};
+
+function initGame(){
+	
+	// create player ball
+	var ballSd = new b2CircleDef();
+	ballSd.density = 0.1;
+	ballSd.radius = 12;
+	ballSd.restitution = 0.5;
+	ballSd.friction = 1;
+	ballSd.userData = 'player';
+	var ballBd = new b2BodyDef();
+	ballBd.linearDamping = .03;
+	ballBd.allowSleep = false;
+	ballBd.AddShape(ballSd);
+	ballBd.position.Set(20,0);
+	player.object = world.CreateBody(ballBd);
+	
+}
+
 function handleKeyDown(evt){
 	keys[evt.keyCode] = true;
 }
