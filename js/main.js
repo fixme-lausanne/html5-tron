@@ -28,9 +28,9 @@ function loadImage() {
     motoOtherSprite = new Array(4);
     for ( var i = 0;i < 4;i++) {
         motoOwnSprite[i] = new Image()
-        motoOwnSprite[i].src = "image/tron_blue_{0}.png".format(i)
+        motoOwnSprite[i].src = "image/tron_blue_{0}.png".replace("{0}", i)
         motoOwnSprite[i] = new Image()
-        motoOwnSprite[i].src = "image/tron_yellow_{0}.png".format(i)
+        motoOwnSprite[i].src = "image/tron_yellow_{0}.png".replace("{0}", i)
     }
 }
 
