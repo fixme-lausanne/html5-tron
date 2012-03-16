@@ -4,14 +4,11 @@ var gameRunning = false
 
 var mainLoopDelay = 10
 var moto = new Image()
- 
+
 function init(){
-    initSettings();
-    loadImages();
- 
+    alert("init")
     //add event handler for clicking on start/stop button and toggle the game play
-    $("#ss").click(function (){
- 
+    $("#ss").click(function () {
         toggleGameplay();
     });
 }
@@ -25,8 +22,9 @@ function init() {
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
 function drawPath(path) {
     ctx.beginPath();  
-    for (i in path):
+    for (i in path) {
         ctx.lineTo(i[0], i[1])
+    }
     ctx.stroke();
 }
 
@@ -37,6 +35,7 @@ function mainLoop() {
 //Start/stop the game loop (and more importantly that annoying boinging!)
 function toggleGameplay()
 {
+    alert("button Clicked")
     gameRunning = !gameRunning;
     
     if(gameRunning)
