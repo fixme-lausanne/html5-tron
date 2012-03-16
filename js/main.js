@@ -17,6 +17,7 @@ var motoOtherSpriteHor = new Image();
 function init() {
     //just a debug array of points
     ownPath = [{x:45, y:64}, {x:56, y:98}, {x:23, y:44}];
+    otherPath = [{x:45, y:64}, {x:56, y:98}, {x:23, y:44}]
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
@@ -32,12 +33,20 @@ function loadImage() {
 }
 
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
-function drawPath(path) {
+function drawPath(path, player) {
     ctx.beginPath();
+    
     for (var index = 0; index < ownPath.length; index++) {
         ctx.lineTo(path[index].x, path[index].y)
     }
+    //bigger line
+    ctx.lineWidth = 4;
+    //round ending for the line
+    ctx.lineCap="round";
+    ctx.fillStyle = "red";  
     ctx.stroke();
+    //reset the draw 
+    ctx.lineWidth = 1;
 }
 
 function mainLoop() {
