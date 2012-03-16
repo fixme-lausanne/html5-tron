@@ -22,7 +22,7 @@ function loadImage() {
     motoOwnSpriteVert.src = "image/tron_blue_vertical.png"
     motoOwnSpriteHor.src = "image/tron_blue_horizontal.png"
     motoOtherSpriteVer.src = "image/tron_yellow_vertical.png"
-    motoOtherSpriteVer.src = "image/tron_yellow_horizontal.png"
+    motoOtherSpriteHor.src = "image/tron_yellow_horizontal.png"
 }
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
 function drawPath(path) {
@@ -32,11 +32,18 @@ function drawPath(path) {
     }
     ctx.stroke();
 }
+function drawMotoBlue1(x, y) 
+{
+	ctx.drawImage(motoOwnSpriteVert, x, y)
+
+	
+}
+
 
 function mainLoop() {
-    ctx.drawImage(motoOwnSpriteVert, 30, 30);
-    ctx.save()
-}
+    drawMotoBlue1(200, 200)
+	ctx.save()
+}	
 
 //Start/stop the game loop (and more importantly that annoying boinging!)
 function toggleGameplay()
