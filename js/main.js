@@ -6,11 +6,9 @@ var mainLoopDelay = 10
 var moto = new Image()
 
 function init(){
-    alert("init")
     //add event handler for clicking on start/stop button and toggle the game play
-    $("#ss").click(function () {
-        toggleGameplay();
-    });
+    var td = document.getElementById('ss');
+    td.setAttribute('onclick', 'toggleGameplay()');
     ctx = document.getElementById('canvas').getContext('2d'); 
 
 }
