@@ -15,6 +15,8 @@ var motoOtherSprite2 = new Image();
 var motoOtherSprite3 = new Image();
 
 function init() {
+    //just a debug array of points
+    ownPath = [{x:45, y:64}, {x:56, y:98}, {x:23, y:44}];
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
@@ -38,7 +40,7 @@ function loadImage() {
 }
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
 function drawPath(path) {
-    ctx.beginPath();  
+    ctx.beginPath();
     for (i in path) {
         ctx.lineTo(i[0], i[1])
     }
@@ -64,6 +66,7 @@ function mainLoop() {
     drawMotoBlue1(200, 200)
 	ctx.save()
 }	
+
 
 //Start/stop the game loop (and more importantly that annoying boinging!)
 function toggleGameplay()
