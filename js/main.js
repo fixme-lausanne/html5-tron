@@ -11,10 +11,6 @@ function init(){
     $("#ss").click(function () {
         toggleGameplay();
     });
-}
-
-function init() {
-    //grab the canvas
     ctx = document.getElementById('canvas').getContext('2d'); 
 
 }
