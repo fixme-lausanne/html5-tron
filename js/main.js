@@ -1,20 +1,29 @@
-var ctx
-var gameloopId
-var gameRunning = false
+var ctx;
+var gameloopId;
+var gameRunning = false;
+var screenX;
+var screenY;
 
-var mainLoopDelay = 10
-var moto = new Image()
+var mainLoopDelay = 10;
+var motoOwnSpriteVert = new Image();
+var motoOwnSpriteHor = new Image();
+var motoOtherSpriteVer = new Image();
+var motoOtherSpriteHor = new Image();
 
-function init(){
-    alert("init")
+function init() {
     //add event handler for clicking on start/stop button and toggle the game play
-    $("#ss").click(function () {
-        toggleGameplay();
-    });
-    ctx = document.getElementById('canvas').getContext('2d'); 
-
+    var td = document.getElementById('ss');
+    td.setAttribute('onclick', 'toggleGameplay()');
+    ctx = document.getElementById('canvas').getContext('2d');
+    loadImage()
 }
 
+function loadImage() {
+    motoOwnSpriteVert.src = "image/tron_blue_vertical.png"
+    motoOwnSpriteHor.src = "image/tron_blue_horizontal.png"
+    motoOtherSpriteVer.src = "image/tron_yellow_vertical.png"
+    motoOtherSpriteVer.src = "image/tron_yellow_horizontal.png"
+}
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
 function drawPath(path) {
     ctx.beginPath();  
@@ -25,7 +34,8 @@ function drawPath(path) {
 }
 
 function mainLoop() {
-    
+    ctx.drawImage(motoOwnSpriteVert, 30, 30);
+    ctx.save()
 }
 
 //Start/stop the game loop (and more importantly that annoying boinging!)
