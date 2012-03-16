@@ -6,7 +6,6 @@ var player = function(){
 };
 
 function initGame(){
-	
 	// create player ball
 	var ballSd = new b2CircleDef();
 	ballSd.density = 0.1;

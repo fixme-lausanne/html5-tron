@@ -9,14 +9,8 @@ var ownPath;
 var ownPathLength;
 var otherPath
 var otherPathLength
-var motoOwnSprite0 = new Image();
-var motoOwnSprite1 = new Image();
-var motoOwnSprite2 = new Image();
-var motoOwnSprite3 = new Image();
-var motoOtherSprite0 = new Image();
-var motoOtherSprite1 = new Image();
-var motoOtherSprite2 = new Image();
-var motoOtherSprite3 = new Image();
+var motoOwnSprites;
+var motoOtherSprites;
 
 function init() {
     //just a debug array of points
@@ -33,14 +27,11 @@ function loadImage() {
     motoOwnSprite = new Array(4);
     motoOtherSprite = new Array(4);
     for ( var i = 0;i < 4;i++) {
-    motoOwnSprite0.src = "image/tron_blue_0.png"
-    motoOwnSprite1.src = "image/tron_blue_1.png"
-    motoOwnSprite2.src = "image/tron_blue_2.png"
-    motoOwnSprite3.src = "image/tron_blue_3.png"
-    motoOtherSprite0.src = "image/tron_yellow_0.png"
-    motoOtherSprite1.src = "image/tron_yellow_1.png"
-    motoOtherSprite2.src = "image/tron_yellow_2.png"
-    motoOtherSprite2.src = "image/tron_yellow_3.png
+        motoOwnSprite[i] = new Image()
+        motoOwnSprite[i].src = "image/tron_blue_{0}.png".format(i)
+        motoOwnSprite[i] = new Image()
+        motoOwnSprite[i].src = "image/tron_yellow_{0}.png".format(i)
+    }
 }
 
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
@@ -59,27 +50,19 @@ function drawPath(path, player) {
     //reset the draw 
     ctx.lineWidth = 1;
 }
-function drawMotoBlue0(x, y, rot) 
-{
-	switch (rot) {
-	case 0: 
-		ctx.drawImage(motoOwnSprite0, x, y);
-		break;
-	case 1: 
-		ctx.drawImage(motoOwnSprite1, x, y);
-		break;
-	case 2:
-		ctx.drawImage(motoOwnSprite2, x, y)
-		
+
+function drawMotoBlue0(x, y, rot, player) {
+    if (player == 0) {
+        ctd.drawImage(motoOwnSprite[rot], x, y)
+    } else {
+        ctd.drawImage(motoOtherSprite[rot], x, y)
+    }
 }
-
-
 
 function mainLoop() {
     drawMotoBlue1(200, 200)
-	ctx.save()
-}	
-
+    ctx.save()
+}
 
 //Start/stop the game loop (and more importantly that annoying boinging!)
 function toggleGameplay()
@@ -87,13 +70,10 @@ function toggleGameplay()
     alert("button Clicked")
     gameRunning = !gameRunning;
     
-    if(gameRunning)
-    {
+    if(gameRunning) {
         clearInterval(gameloopId);
         gameloopId = setInterval(mainLoop, mainLoopDelay);
-    }
-    else
-    {
+    } else {
         clearInterval(gameloopId);
     }
 }
