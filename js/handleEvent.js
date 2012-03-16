@@ -8,6 +8,11 @@ function handleKeyUp(evt){
 	keys[evt.keyCode] = false;
 }
 
+//add event handler to surrounding DIV to monitor mouse move and update mushroom's x position
+//    $("#container").mousemove(function(e){
+//        mushroomX = e.pageX;
+//    });
+
 function handleInteractions(){
 
 var vel = player.object.GetLinearVelocity();
