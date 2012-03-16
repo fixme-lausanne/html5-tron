@@ -9,11 +9,6 @@ function init(){
     initSettings();
     loadImages();
  
-    //add event handler to surrounding DIV to monitor mouse move and update mushroom's x position
-    $("#container").mousemove(function(e){
-        mushroomX = e.pageX;
-    });
- 
     //add event handler for clicking on start/stop button and toggle the game play
     $("#ss").click(function (){
  
