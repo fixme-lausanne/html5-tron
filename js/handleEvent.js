@@ -1,8 +1,25 @@
+var keys = [];
+
 function handleKeyDown(evt){
 	keys[evt.keyCode] = true;
 }
 
-
 function handleKeyUp(evt){
 	keys[evt.keyCode] = false;
+}
+
+function handleInteractions(){
+
+var vel = player.object.GetLinearVelocity();
+	if (keys[38] && player.canJump){
+		vel.y = -150;	
+	}
+	
+	// left/right arrows
+	if (keys[37]){
+		vel.x = -60;
+	}
+	else if (keys[39]){
+		vel.x = 60;
+	}
 }
