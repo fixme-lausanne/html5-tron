@@ -22,4 +22,8 @@ var vel = player.object.GetLinearVelocity();
 	else if (keys[39]){
 		vel.x = 60;
 	}
+	player.object.SetLinearVelocity(vel);
 }
+
+// disable vertical scrolling from arrows :)
+document.onkeydown=function(){return event.keyCode!=38 && event.keyCode!=40}
