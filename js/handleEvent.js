@@ -54,4 +54,4 @@ var vel = player.object.GetLinearVelocity();
 }
 
 // disable vertical scrolling from arrows :)
-document.onkeydown=function(){return event.keyCode!=38 && event.keyCode!=40}
+document.onkeydown=function(event){return event.keyCode!=38 && event.keyCode!=40}
