@@ -6,9 +6,11 @@ var screenY;
 
 var mainLoopDelay = 10;
 var ownPath;
+var ownPathLength;
 var motoOwnSpriteVert = new Image();
 var motoOwnSpriteHor = new Image();
-var myarray=new Array(3);
+var otherPath
+var otherPathLength
 var motoOtherSpriteVer = new Image();
 var motoOtherSpriteHor = new Image();
 
@@ -28,11 +30,12 @@ function loadImage() {
     motoOtherSpriteVer.src = "image/tron_yellow_vertical.png"
     motoOtherSpriteVer.src = "image/tron_yellow_horizontal.png"
 }
+
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
 function drawPath(path) {
     ctx.beginPath();
-    for (i in path) {
-        ctx.lineTo(i[0], i[1])
+    for (var index = 0; index < ownPath.length; index++) {
+        ctx.lineTo(path[index].x, path[index].y)
     }
     ctx.stroke();
 }
