@@ -35,10 +35,7 @@ function init() {
     ctx = canvas.getContext('2d');
     var canvas = document.getElementById("canvas");
     screenX = canvas.height;
-    screenY  = canvas.offsetWidth;
-
-    screenX 
-    screenY 
+    screenY  = canvas.width;
     loadImage()
 }
 
@@ -108,8 +105,9 @@ function moveMoto() {
 function dectectCollision() {
     switch (ownOrientation) {
         case 0: return (ownActualPoint.y - 33) < 0;
-        case 1: return ownActualPoint.x > screenX;
-        case 2: return 
+        case 1: return ownActualPoint.x + 33 > screenX;
+        case 2: return (ownActualPoint.y + 33) > screenY;
+        case 3: return ownActualPoint.x - 33 < 0;
     }
 }   
 
@@ -122,7 +120,10 @@ function mainLoop() {
     drawPath(otherPath, 1)
     drawMoto(ownActualPoint.x, ownActualPoint.y, ownOrientation, 0)
     ctx.save()
-
+    if (dectectCollision()) {
+        alert("PERDUUUUUUUU")
+        clearInterval(gameloopId);
+    }
     moveMoto()
     
 }
@@ -138,7 +139,7 @@ function toggleGameplay()
     } else {
         clearInterval(gameloopId);
         //clear canvas
-        ctx.clearRect(0, 0, 500, 500);
+        ctx.clearRect(0, 0, screenX, screenY);
         ctx.save()
     }
 }
