@@ -3,50 +3,49 @@ var gameloopId;
 var gameRunning = false;
 var screenX;
 var screenY;
-var spriteSize = {w:16, h:33}
 
 var mainLoopDelay = 10;
 
 var ownPath;
 var ownOrientation;
 var motoOwnSprites;
-var ownActualPoint
-var ownSpeed
+var ownActualPoint;
+var ownSpeed;
 
 var otherPath;
 var otherOrientation;
 var motoOtherSprites;
-var otherActualPoint
+var otherActualPoint;
 
 function init() {
     //just a debug array of points
     ownOrientation = 2;
     ownActualPoint = {x:0, y:0}
     ownPath = [{x:0, y:0}];
-    ownSpeed = 0.1
-    otherPath = [{x:0, y:0}]
+    ownSpeed = 0.1;
+    otherPath = [{x:0, y:0}];
     
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
-    document.onkeydown = handleInteractions
+    document.onkeydown = handleInteractions;
     //td.setAttribute('onKeyPress', 'return handleInteractions(event)')
     var canvas = document.getElementById("canvas");
     ctx = canvas.getContext('2d');
     var canvas = document.getElementById("canvas");
     screenX = canvas.height;
     screenY  = canvas.width;
-    loadImage()
+    loadImage();
 }
 
 function loadImage() {
     motoOwnSprite = new Array(4);
     motoOtherSprite = new Array(4);
     for ( var i = 0;i < 4;i++) {
-        motoOwnSprite[i] = new Image()
-        motoOwnSprite[i].src = "image/tron_blue_{0}.png".replace("{0}", i)
-        motoOwnSprite[i] = new Image()
-        motoOwnSprite[i].src = "image/tron_yellow_{0}.png".replace("{0}", i)
+        motoOwnSprite[i] = new Image();
+        motoOwnSprite[i].src = "image/tron_blue_{0}.png".replace("{0}", i);
+        motoOwnSprite[i] = new Image();
+        motoOwnSprite[i].src = "image/tron_yellow_{0}.png".replace("{0}", i);
     }
 }
 
@@ -55,22 +54,28 @@ function drawPath(path, player) {
     ctx.beginPath();
     
     for (var index = 0; index < ownPath.length; index++) {
-        ctx.lineTo(ownPath[index].x, ownPath[index].y)
+        ctx.lineTo(ownPath[index].x, ownPath[index].y);
     }
     //add the actual point for the player
-    ctx.lineTo(ownActualPoint.x, ownActualPoint.y)
+    ctx.lineTo(ownActualPoint.x, ownActualPoint.y);
     //bigger line
     ctx.lineWidth = 4;
+    //blur line try
+
     //round ending for the line
     ctx.lineCap = "round";
     if (player == 0) {
         ctx.strokeStyle = "blue";
     } else {
-        ctx.strokeStyle = "yellow"
+        ctx.strokeStyle = "yellow";
     }
     ctx.stroke();
+    ctx.shadowBlur = 0;
+    
+    ctx.strokeStyle = ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
     //reset the draw 
-    ctx.lineWidth = 1;
+    ctx.restore();
+    
 }
 
 function drawMoto(x, y, rot, player) {
@@ -82,13 +87,13 @@ function drawMoto(x, y, rot, player) {
             case 3: ctx.drawImage(motoOwnSprite[rot], x - 33, y - 7); break; //OK
         }
     } else {
-        ctx.drawImage(motoOtherSprite[rot], x, y)
+        ctx.drawImage(motoOtherSprite[rot], x, y);
     }
 }
 
 function updateOrientation(newOrientation) {
     if (((ownOrientation + newOrientation) % 2) != 0) {
-        ownOrientation = newOrientation
+        ownOrientation = newOrientation;
         ownPath.push({x: ownActualPoint.x, y: ownActualPoint.y});
     }
 }
@@ -116,15 +121,15 @@ function mainLoop() {
     //clear screen
     ctx.clearRect(0, 0, screenX, screenY);
     //redraw the thingy
-    drawPath(ownPath, 0)
-    drawPath(otherPath, 1)
-    drawMoto(ownActualPoint.x, ownActualPoint.y, ownOrientation, 0)
+    drawPath(ownPath, 0);
+    drawPath(otherPath, 1);
+    drawMoto(ownActualPoint.x, ownActualPoint.y, ownOrientation, 0);
     ctx.save()
     if (dectectCollision()) {
-        alert("PERDUUUUUUUU")
+        alert("PERDUUUUUUUU");
         clearInterval(gameloopId);
     }
-    moveMoto()
+    moveMoto();
     
 }
 
@@ -133,13 +138,13 @@ function toggleGameplay()
 {
     gameRunning = !gameRunning;
     if(gameRunning) {
-        init()
+        init();
         clearInterval(gameloopId);
         gameloopId = setInterval(mainLoop, mainLoopDelay);
     } else {
         clearInterval(gameloopId);
         //clear canvas
         ctx.clearRect(0, 0, screenX, screenY);
-        ctx.save()
+        ctx.save();
     }
 }
