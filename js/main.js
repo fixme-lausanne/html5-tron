@@ -7,6 +7,7 @@ var screenY;
 var mainLoopDelay = 10;
 
 var ownPath;
+var ownOrientation;
 var motoOwnSprites;
 
 var otherPath
@@ -15,10 +16,13 @@ var motoOtherSprites;
 function init() {
     //just a debug array of points
     ownPath = [{x:45, y:64}, {x:56, y:98}, {x:23, y:44}];
+    ownOrientation = 0;
     otherPath = [{x:60, y:88}, {x:46, y:200}, {x:200, y:200}]
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
+    document.onkeydown = handleInteractions
+    //td.setAttribute('onKeyPress', 'return handleInteractions(event)')
     ctx = document.getElementById('canvas').getContext('2d');
     loadImage()
 }
@@ -64,9 +68,11 @@ function drawMoto(x, y, rot, player) {
 }
 
 function mainLoop() {
+    //clear screen
+    ctx.clearRect(0, 0, 500, 500);
     drawPath(ownPath, 0)
     drawPath(otherPath, 1)
-    drawMoto(200, 200, 3, 0)
+    drawMoto(200, 200, ownOrientation, 0)
     ctx.save()
 }
 
