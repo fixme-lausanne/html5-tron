@@ -23,19 +23,23 @@ function initGame(){
 }
 
 function handleKeyDown() {
-    ownOrientation = 2
+    updateOrientation(2)
 }
 
 function handleKeyUp() {
-    ownOrientation = 0
+    updateOrientation(0)
 }
 
 function handleKeyRight() {
-    ownOrientation = 1
+    updateOrientation(1)
 }
 
 function handleKeyLeft() {
-    ownOrientation = 3
+    updateOrientation(3)
+}
+
+function handleKeyA() {
+    ownSpeed += 0.3
 }
 
 //add event handler to surrounding DIV to monitor mouse move and update mushroom's x position
@@ -46,12 +50,13 @@ function handleKeyLeft() {
 function handleInteractions(e){
     var code = e.keyCode
     switch (code) {
-    	case 37: handleKeyLeft(); break;
-    	case 38: handleKeyUp(); break;
-    	case 39: handleKeyRight(); break;
-    	case 40: handleKeyDown(); break;
+		case 65: handleKeyA(); break;
+        case 37: handleKeyLeft(); break;
+        case 38: handleKeyUp(); break;
+        case 39: handleKeyRight(); break;
+        case 40: handleKeyDown(); break;
     }
-    return true
+    return false
 }
 
 // disable vertical scrolling from arrows :)
