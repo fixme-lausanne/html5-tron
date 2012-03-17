@@ -5,17 +5,17 @@ var screenX;
 var screenY;
 
 var mainLoopDelay = 10;
+
 var ownPath;
-var ownPathLength;
-var otherPath
-var otherPathLength
 var motoOwnSprites;
+
+var otherPath
 var motoOtherSprites;
 
 function init() {
     //just a debug array of points
     ownPath = [{x:45, y:64}, {x:56, y:98}, {x:23, y:44}];
-    otherPath = [{x:45, y:64}, {x:56, y:98}, {x:23, y:44}]
+    otherPath = [{x:60, y:88}, {x:46, y:200}, {x:200, y:200}]
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
@@ -44,23 +44,29 @@ function drawPath(path, player) {
     //bigger line
     ctx.lineWidth = 4;
     //round ending for the line
-    ctx.lineCap="round";
-    ctx.fillStyle = "red";  
+    ctx.lineCap = "round";
+    if (player == 0) {
+        ctx.strokeStyle = "blue";
+    } else {
+        ctx.strokeStyle = "yellow"
+    }
     ctx.stroke();
     //reset the draw 
     ctx.lineWidth = 1;
 }
 
-function drawMotoBlue0(x, y, rot, player) {
+function drawMoto(x, y, rot, player) {
     if (player == 0) {
-        ctd.drawImage(motoOwnSprite[rot], x, y)
+        ctx.drawImage(motoOwnSprite[rot], x, y)
     } else {
-        ctd.drawImage(motoOtherSprite[rot], x, y)
+        ctx.drawImage(motoOtherSprite[rot], x, y)
     }
 }
 
 function mainLoop() {
-    drawMotoBlue1(200, 200)
+    drawPath(ownPath, 0)
+    drawPath(otherPath, 1)
+    drawMoto(200, 200, 3, 0)
     ctx.save()
 }
 
