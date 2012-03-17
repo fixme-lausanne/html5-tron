@@ -114,7 +114,7 @@ function dectectCollision() {
 
 function mainLoop() {
     //clear screen
-    ctx.clearRect(0, 0, 500, 500);
+    ctx.clearRect(0, 0, screenX, screenY);
     //redraw the thingy
     drawPath(ownPath, 0)
     drawPath(otherPath, 1)
