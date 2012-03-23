@@ -163,16 +163,20 @@ function mainLoop() {
     drawMoto(ownMoto);
     drawMoto(otherMoto)
     if (detectCollisionWithPlayer(ownMoto, ownMoto) || detectCollisionWithPlayer(ownMoto, otherMoto)) {
-        alert("PERDUUUUU WALL")
+        alert("Player 1 just lost against a trace")
         clearInterval(gameloopId);
 
     }
-    if (detectCollisionWithPlayer(otherMoto, ownMoto)) {
-        alert("GAGNEEEEEEE")
+    if (dectectCollision(ownMoto)) {
+        alert("Player 1 just lost against a wall");
         clearInterval(gameloopId);
     }
-    if (dectectCollision(ownMoto)) {
-        alert("PERDUUUUUUUU");
+    if (detectCollisionWithPlayer(otherMoto, otherMoto) || detectCollisionWithPlayer(otherMoto, ownMoto)) {
+        alert("Player 2 just lost against a trace")
+        clearInterval(gameloopId);
+    }
+    if (dectectCollision(otherMoto)) {
+        alert("Player 2 just lost against a wall");
         clearInterval(gameloopId);
     }
     moveMoto(ownMoto);
