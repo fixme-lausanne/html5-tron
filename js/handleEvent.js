@@ -19,33 +19,27 @@ function initGame(){
     ballBd.AddShape(ballSd);
     ballBd.position.Set(20,0);
     player.object = world.CreateBody(ballBd);
-    
 }
 
 function handleKeyDown() {
-    updateOrientation(2)
+    updateOrientation(ownMoto, 2)
 }
 
 function handleKeyUp() {
-    updateOrientation(0)
+    updateOrientation(ownMoto, 0)
 }
 
 function handleKeyRight() {
-    updateOrientation(1)
+    updateOrientation(ownMoto, 1)
 }
 
 function handleKeyLeft() {
-    updateOrientation(3)
+    updateOrientation(ownMoto, 3)
 }
 
 function handleKeyA() {
-    ownSpeed += 0.3
+    ownMoto.speed += 0.3
 }
-
-//add event handler to surrounding DIV to monitor mouse move and update mushroom's x position
-//    $("#container").mousemove(function(e){
-//        mushroomX = e.pageX;
-//    });
 
 function handleInteractions(e){
     var code = e.keyCode

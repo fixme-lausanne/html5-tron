@@ -6,65 +6,62 @@ var screenY;
 
 var mainLoopDelay = 10;
 
-var ownPath;
-var ownOrientation;
-var motoOwnSprites;
-var ownActualPoint;
-var ownSpeed;
+var Moto = function(){
+    this.id;
+    this.path;
+    this.orientation;
+    this.sprites;
+    this.actualPoint;
+    this.speed;
+};
+Moto.prototype.loadImage = function(path){
+    this.sprites = new Array(4);
+    for ( var i = 0;i < 4;i++) {
+        this.sprites[i] = new Image();
+        this.sprites[i].src = path.replace("{0}", i);
+    }
+};
 
-var otherPath;
-var otherOrientation;
-var motoOtherSprites;
-var otherActualPoint;
+var ownMoto;
+var otherMoto;
 
 function init() {
     //just a debug array of points
-    ownOrientation = 2;
-    ownActualPoint = {x:0, y:0}
-    ownPath = [{x:0, y:0}];
-    ownSpeed = 0.1;
-    otherPath = [{x:0, y:0}];
-    
+    ownMoto = new Moto();
+    ownMoto.actualPoint = {x:0, y:0};
+    ownMoto.orientation = 2;
+    ownMoto.path = [{x:0, y:0}];
+    ownMoto.speed = 0.1;
+    ownMoto.loadImage("image/tron_blue_{0}.png");
+    ownMoto.id = 0;
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
     document.onkeydown = handleInteractions;
+    
     //td.setAttribute('onKeyPress', 'return handleInteractions(event)')
     var canvas = document.getElementById("canvas");
     ctx = canvas.getContext('2d');
-    var canvas = document.getElementById("canvas");
     screenX = canvas.height;
     screenY  = canvas.width;
-    loadImage();
-}
-
-function loadImage() {
-    motoOwnSprite = new Array(4);
-    motoOtherSprite = new Array(4);
-    for ( var i = 0;i < 4;i++) {
-        motoOwnSprite[i] = new Image();
-        motoOwnSprite[i].src = "image/tron_blue_{0}.png".replace("{0}", i);
-        motoOwnSprite[i] = new Image();
-        motoOwnSprite[i].src = "image/tron_yellow_{0}.png".replace("{0}", i);
-    }
 }
 
 //https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas#Using_Paths
-function drawPath(path, player) {
+function drawPath(player) {
     ctx.beginPath();
     
-    for (var index = 0; index < ownPath.length; index++) {
-        ctx.lineTo(ownPath[index].x, ownPath[index].y);
+    for (var index = 0; index < player.path.length; index++) {
+        ctx.lineTo(player.path[index].x, player.path[index].y);
     }
     //add the actual point for the player
-    ctx.lineTo(ownActualPoint.x, ownActualPoint.y);
+    ctx.lineTo(player.actualPoint.x, player.actualPoint.y);
     //bigger line
     ctx.lineWidth = 4;
     //blur line try
 
     //round ending for the line
     ctx.lineCap = "round";
-    if (player == 0) {
+    if (player.id == 0) {
         ctx.strokeStyle = "blue";
     } else {
         ctx.strokeStyle = "yellow";
@@ -78,41 +75,39 @@ function drawPath(path, player) {
     
 }
 
-function drawMoto(x, y, rot, player) {
-    if (player == 0) {
-        switch (rot) {
-            case 0: ctx.drawImage(motoOwnSprite[rot], x - 7, y - 33); break; //OK
-            case 1: ctx.drawImage(motoOwnSprite[rot], x, y - 7); break; //OK
-            case 2: ctx.drawImage(motoOwnSprite[rot], x - 7, y); break; //OK
-            case 3: ctx.drawImage(motoOwnSprite[rot], x - 33, y - 7); break; //OK
-        }
-    } else {
-        ctx.drawImage(motoOtherSprite[rot], x, y);
+function drawMoto(player) {
+    var x = player.actualPoint.x
+    var y = player.actualPoint.y
+    switch (player.orientation) {
+        case 0: ctx.drawImage(player.sprites[0], x - 7, y - 33); break; //OK
+        case 1: ctx.drawImage(player.sprites[1], x, y - 7); break; //OK
+        case 2: ctx.drawImage(player.sprites[2], x - 7, y); break; //OK
+        case 3: ctx.drawImage(player.sprites[3], x - 33, y - 7); break; //OK
     }
 }
 
-function updateOrientation(newOrientation) {
-    if (((ownOrientation + newOrientation) % 2) != 0) {
-        ownOrientation = newOrientation;
-        ownPath.push({x: ownActualPoint.x, y: ownActualPoint.y});
+function updateOrientation(player, newOrientation) {
+    if (((player.orientation + newOrientation) % 2) != 0) {
+        player.orientation = newOrientation;
+        player.path.push({x: player.actualPoint.x, y: player.actualPoint.y});
     }
 }
 
-function moveMoto() {
-    switch (ownOrientation) {
-        case 0:ownActualPoint.y = ownActualPoint.y - ownSpeed; break;
-        case 1:ownActualPoint.x = ownActualPoint.x + ownSpeed; break;
-        case 2:ownActualPoint.y = ownActualPoint.y + ownSpeed; break;
-        case 3:ownActualPoint.x = ownActualPoint.x - ownSpeed; break;
+function moveMoto(player) {
+    switch (player.orientation) {
+        case 0:player.actualPoint.y = player.actualPoint.y - player.speed; break;
+        case 1:player.actualPoint.x = player.actualPoint.x + player.speed; break;
+        case 2:player.actualPoint.y = player.actualPoint.y + player.speed; break;
+        case 3:player.actualPoint.x = player.actualPoint.x - player.speed; break;
     }
 }
 
-function dectectCollision() {
-    switch (ownOrientation) {
-        case 0: return (ownActualPoint.y - 33) < 0;
-        case 1: return ownActualPoint.x + 33 > screenX;
-        case 2: return (ownActualPoint.y + 33) > screenY;
-        case 3: return ownActualPoint.x - 33 < 0;
+function dectectCollision(player) {
+    switch (player.orientation) {
+        case 0: return (player.actualPoint.y - 33) < 0;
+        case 1: return (player.actualPoint.x + 33) > screenX;
+        case 2: return (player.actualPoint.y + 33) > screenY;
+        case 3: return (player.actualPoint.x - 33) < 0;
     }
 }   
 
@@ -121,16 +116,14 @@ function mainLoop() {
     //clear screen
     ctx.clearRect(0, 0, screenX, screenY);
     //redraw the thingy
-    drawPath(ownPath, 0);
-    drawPath(otherPath, 1);
-    drawMoto(ownActualPoint.x, ownActualPoint.y, ownOrientation, 0);
+    drawPath(ownMoto);
+    drawMoto(ownMoto);
     ctx.save()
-    if (dectectCollision()) {
+    if (dectectCollision(ownMoto)) {
         alert("PERDUUUUUUUU");
         clearInterval(gameloopId);
     }
-    moveMoto();
-    
+    moveMoto(ownMoto);
 }
 
 //Start/stop the game loop (and more importantly that annoying boinging!)
