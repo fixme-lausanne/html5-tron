@@ -119,13 +119,14 @@ function dectectCollision(player) {
 
 function detectCollisionWithPlayer(player, playerWall) {
     for (var i = 1; i < player.path.length; i++) {
-        if (playerWall.path[i].x == playerWall.path[i].x) {
+        if (playerWall.path[i - 1].x == playerWall.path[i].x) {
             //horizontal wall 
             if (player.orientation == 1) {
                 //go right
                 if ((player.actualPoint.x + 33) < playerWall.path[i].x) {
                     if ((player.actualPoint.x + 33 + player.speed) > playerWall.path[i].x) {
-                        return true
+                        //check the bound of the point
+                            return true;
                     }
                 }
             } else if (player.orientation == 3) {
@@ -139,8 +140,18 @@ function detectCollisionWithPlayer(player, playerWall) {
         } else {
             if (player.orientation == 0) {
                 //go up
+                if ((player.actualPoint.y - 33) > playerWall.path[i].y) {
+                    if ((player.actualPoint.y - 33 - player.speed) < playerWall.path[i].y) {
+                        return true
+                    }
+                }
             } else if (player.orientation == 2) {
                 //go down
+                if ((player.actualPoint.y + 33) < playerWall.path[i].y) {
+                    if ((player.actualPoint.y + 33 + player.speed) > playerWall.path[i].y) {
+                        return true
+                    }
+                }
             }
         }
     }
