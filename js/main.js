@@ -13,6 +13,8 @@ var Moto = function(){
     this.sprites;
     this.actualPoint;
     this.speed;
+    this.lineWidth;
+    this.lineColor;
 };
 Moto.prototype.loadImage = function(path){
     this.sprites = new Array(4);
@@ -21,7 +23,9 @@ Moto.prototype.loadImage = function(path){
         this.sprites[i].src = path.replace("{0}", i);
     }
 };
-
+Moto.prototype.moveHorizontal = function(path){
+    return !(this.orientation % 2);
+s};
 var ownMoto;
 var otherMoto;
 
@@ -34,12 +38,14 @@ function init() {
     ownMoto.speed = 0.1;
     ownMoto.loadImage("image/tron_blue_{0}.png");
     ownMoto.id = 0;
+    ownMoto.lineWidth = 4;
+    ownMoto.lineColor = "blue";
+    
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
     document.onkeydown = handleInteractions;
     
-    //td.setAttribute('onKeyPress', 'return handleInteractions(event)')
     var canvas = document.getElementById("canvas");
     ctx = canvas.getContext('2d');
     screenX = canvas.height;
@@ -56,21 +62,13 @@ function drawPath(player) {
     //add the actual point for the player
     ctx.lineTo(player.actualPoint.x, player.actualPoint.y);
     //bigger line
-    ctx.lineWidth = 4;
+    ctx.lineWidth = player.lineWidth;
     //blur line try
 
     //round ending for the line
     ctx.lineCap = "round";
-    if (player.id == 0) {
-        ctx.strokeStyle = "blue";
-    } else {
-        ctx.strokeStyle = "yellow";
-    }
+    ctx.strokeStyle = player.lineColor;
     ctx.stroke();
-    ctx.shadowBlur = 0;
-    
-    ctx.strokeStyle = ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-    //reset the draw 
     ctx.restore();
     
 }
@@ -78,6 +76,14 @@ function drawPath(player) {
 function drawMoto(player) {
     var x = player.actualPoint.x
     var y = player.actualPoint.y
+    var radius = 2;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "#8ED6FF";
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "black";
+    ctx.stroke();
     switch (player.orientation) {
         case 0: ctx.drawImage(player.sprites[0], x - 7, y - 33); break; //OK
         case 1: ctx.drawImage(player.sprites[1], x, y - 7); break; //OK
@@ -111,6 +117,34 @@ function dectectCollision(player) {
     }
 }   
 
+function detectCollisionWithPlayer(player, playerWall) {
+    for (var i = 1; i < player.path.length; i++) {
+        if (playerWall.path[i].x == playerWall.path[i].x) {
+            //horizontal wall 
+            if (player.orientation == 1) {
+                //go right
+                if ((player.actualPoint.x + 33) < playerWall.path[i].x) {
+                    if ((player.actualPoint.x + 33 + player.speed) > playerWall.path[i].x) {
+                        return true
+                    }
+                }
+            } else if (player.orientation == 3) {
+                //go left
+                if ((player.actualPoint.x - 33) > playerWall.path[i].x) {
+                    if ((player.actualPoint.x - 33 - player.speed) < playerWall.path[i].x) {
+                        return true
+                    }
+                }
+            }
+        } else {
+            if (player.orientation == 0) {
+                //go up
+            } else if (player.orientation == 2) {
+                //go down
+            }
+        }
+    }
+}
 
 function mainLoop() {
     //clear screen
@@ -119,6 +153,9 @@ function mainLoop() {
     drawPath(ownMoto);
     drawMoto(ownMoto);
     ctx.save()
+    if (detectCollisionWithPlayer(ownMoto, ownMoto)) {
+        alert("LOST")
+    }
     if (dectectCollision(ownMoto)) {
         alert("PERDUUUUUUUU");
         clearInterval(gameloopId);
