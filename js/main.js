@@ -6,15 +6,14 @@ var screenY;
 
 var mainLoopDelay = 10;
 
-var Moto = function(){
-    this.id;
-    this.path;
-    this.orientation;
+var Moto = function(startPoint, lineColor){
+    this.path = [{x:startPoint.x, y:startPoint.y}];
+    this.orientation = 2;
     this.sprites;
-    this.actualPoint;
-    this.speed;
-    this.lineWidth;
-    this.lineColor;
+    this.actualPoint = startPoint;
+    this.speed = 0.1;
+    this.lineWidth = 4;
+    this.lineColor = lineColor;
 };
 Moto.prototype.loadImage = function(path){
     this.sprites = new Array(4);
@@ -25,22 +24,17 @@ Moto.prototype.loadImage = function(path){
 };
 Moto.prototype.moveHorizontal = function(path){
     return !(this.orientation % 2);
-s};
+};
 var ownMoto;
 var otherMoto;
 
 function init() {
     //just a debug array of points
-    ownMoto = new Moto();
-    ownMoto.actualPoint = {x:0, y:0};
-    ownMoto.orientation = 2;
-    ownMoto.path = [{x:0, y:0}];
-    ownMoto.speed = 0.1;
+    ownMoto = new Moto({x:0, y:0}, "blue");
     ownMoto.loadImage("image/tron_blue_{0}.png");
-    ownMoto.id = 0;
-    ownMoto.lineWidth = 4;
-    ownMoto.lineColor = "blue";
     
+    otherMoto = new Moto({x:100, y:100}, "yellow");
+    otherMoto.loadImage("image/tron_yellow_{0}.png");
     //add event handler for clicking on start/stop button and toggle the game play
     var td = document.getElementById('ss');
     td.setAttribute('onclick', 'toggleGameplay()');
@@ -56,8 +50,8 @@ function init() {
 function drawPath(player) {
     ctx.beginPath();
     
-    for (var index = 0; index < player.path.length; index++) {
-        ctx.lineTo(player.path[index].x, player.path[index].y);
+    for (var i = 0; i < player.path.length; i++) {
+        ctx.lineTo(player.path[i].x, player.path[i].y);
     }
     //add the actual point for the player
     ctx.lineTo(player.actualPoint.x, player.actualPoint.y);
@@ -68,22 +62,14 @@ function drawPath(player) {
     //round ending for the line
     ctx.lineCap = "round";
     ctx.strokeStyle = player.lineColor;
-    ctx.stroke();
-    ctx.restore();
     
+    ctx.stroke();
 }
 
 function drawMoto(player) {
     var x = player.actualPoint.x
     var y = player.actualPoint.y
-    var radius = 2;
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-    ctx.fillStyle = "#8ED6FF";
-    ctx.fill();
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "black";
-    ctx.stroke();
+    
     switch (player.orientation) {
         case 0: ctx.drawImage(player.sprites[0], x - 7, y - 33); break; //OK
         case 1: ctx.drawImage(player.sprites[1], x, y - 7); break; //OK
@@ -121,7 +107,7 @@ function sgn(int) {
     else return 0;
 }
 function detectCollisionWithPlayer(player, playerWall) {
-    for (var i = 1; i < player.path.length; i++) {
+    for (var i = 1; i < playerWall.path.length; i++) {
         if (playerWall.path[i - 1].x == playerWall.path[i].x) {
             //horizontal wall 
             if (player.orientation == 1) {
@@ -165,22 +151,31 @@ function detectCollisionWithPlayer(player, playerWall) {
 }
 
 function mainLoop() {
+
     //clear screen
     ctx.clearRect(0, 0, screenX, screenY);
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, screenX, screenY);
     //redraw the thingy
     drawPath(ownMoto);
+    drawPath(otherMoto)
     drawMoto(ownMoto);
-    ctx.save()
-    if (detectCollisionWithPlayer(ownMoto, ownMoto)) {
-        alert("PERDUUUUU")
+    drawMoto(otherMoto)
+    if (detectCollisionWithPlayer(ownMoto, ownMoto) || detectCollisionWithPlayer(ownMoto, otherMoto)) {
+        alert("PERDUUUUU WALL")
         clearInterval(gameloopId);
 
+    }
+    if (detectCollisionWithPlayer(otherMoto, ownMoto)) {
+        alert("GAGNEEEEEEE")
+        clearInterval(gameloopId);
     }
     if (dectectCollision(ownMoto)) {
         alert("PERDUUUUUUUU");
         clearInterval(gameloopId);
     }
     moveMoto(ownMoto);
+    moveMoto(otherMoto)
 }
 
 //Start/stop the game loop (and more importantly that annoying boinging!)
