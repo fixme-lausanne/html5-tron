@@ -116,7 +116,10 @@ function dectectCollision(player) {
         case 3: return (player.actualPoint.x - 33) < 0;
     }
 }   
-
+function sgn(int) {
+    if (int >= 0) return 1;
+    else return 0;
+}
 function detectCollisionWithPlayer(player, playerWall) {
     for (var i = 1; i < player.path.length; i++) {
         if (playerWall.path[i - 1].x == playerWall.path[i].x) {
@@ -125,6 +128,7 @@ function detectCollisionWithPlayer(player, playerWall) {
                 //go right
                 if ((player.actualPoint.x + 33) < playerWall.path[i].x) {
                     if ((player.actualPoint.x + 33 + player.speed) > playerWall.path[i].x) {
+                        if (sgn(player.actualPoint.y - playerWall.path[i].y) != sgn(player.actualPoint.y - playerWall.path[i - 1].y))
                         //check the bound of the point
                             return true;
                     }
@@ -133,7 +137,8 @@ function detectCollisionWithPlayer(player, playerWall) {
                 //go left
                 if ((player.actualPoint.x - 33) > playerWall.path[i].x) {
                     if ((player.actualPoint.x - 33 - player.speed) < playerWall.path[i].x) {
-                        return true
+                        if (sgn(player.actualPoint.y - playerWall.path[i].y) != sgn(player.actualPoint.y - playerWall.path[i - 1].y))
+                            return true
                     }
                 }
             }
@@ -142,14 +147,16 @@ function detectCollisionWithPlayer(player, playerWall) {
                 //go up
                 if ((player.actualPoint.y - 33) > playerWall.path[i].y) {
                     if ((player.actualPoint.y - 33 - player.speed) < playerWall.path[i].y) {
-                        return true
+                        if (sgn(player.actualPoint.x - playerWall.path[i].x) != sgn(player.actualPoint.x - playerWall.path[i - 1].x))
+                            return true
                     }
                 }
             } else if (player.orientation == 2) {
                 //go down
                 if ((player.actualPoint.y + 33) < playerWall.path[i].y) {
                     if ((player.actualPoint.y + 33 + player.speed) > playerWall.path[i].y) {
-                        return true
+                        if (sgn(player.actualPoint.x - playerWall.path[i].x) != sgn(player.actualPoint.x - playerWall.path[i - 1].x))
+                            return true
                     }
                 }
             }
@@ -165,7 +172,9 @@ function mainLoop() {
     drawMoto(ownMoto);
     ctx.save()
     if (detectCollisionWithPlayer(ownMoto, ownMoto)) {
-        alert("LOST")
+        alert("PERDUUUUU")
+        clearInterval(gameloopId);
+
     }
     if (dectectCollision(ownMoto)) {
         alert("PERDUUUUUUUU");
