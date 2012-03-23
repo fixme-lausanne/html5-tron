@@ -107,42 +107,43 @@ function sgn(int) {
     else return 0;
 }
 function detectCollisionWithPlayer(player, playerWall) {
-    for (var i = 1; i < playerWall.path.length; i++) {
-        if (playerWall.path[i - 1].x == playerWall.path[i].x) {
+    var path = playerWall.path.concat(playerWall.actualPoint)
+    for (var i = 1; i < path.length; i++) {
+        if (path[i - 1].x == path[i].x) {
             //horizontal wall 
             if (player.orientation == 1) {
                 //go right
-                if ((player.actualPoint.x + 33) < playerWall.path[i].x) {
-                    if ((player.actualPoint.x + 33 + player.speed) > playerWall.path[i].x) {
-                        if (sgn(player.actualPoint.y - playerWall.path[i].y) != sgn(player.actualPoint.y - playerWall.path[i - 1].y))
+                if ((player.actualPoint.x + 33) < path[i].x) {
+                    if ((player.actualPoint.x + 33 + player.speed) > path[i].x) {
+                        if (sgn(player.actualPoint.y - path[i].y) != sgn(player.actualPoint.y - path[i - 1].y))
                         //check the bound of the point
                             return true;
                     }
                 }
             } else if (player.orientation == 3) {
                 //go left
-                if ((player.actualPoint.x - 33) > playerWall.path[i].x) {
-                    if ((player.actualPoint.x - 33 - player.speed) < playerWall.path[i].x) {
-                        if (sgn(player.actualPoint.y - playerWall.path[i].y) != sgn(player.actualPoint.y - playerWall.path[i - 1].y))
-                            return true
+                if ((player.actualPoint.x - 33) > path[i].x) {
+                    if ((player.actualPoint.x - 33 - player.speed) < path[i].x) {
+                        if (sgn(player.actualPoint.y - path[i].y) != sgn(player.actualPoint.y - path[i - 1].y))
+                            return true;
                     }
                 }
             }
         } else {
             if (player.orientation == 0) {
                 //go up
-                if ((player.actualPoint.y - 33) > playerWall.path[i].y) {
-                    if ((player.actualPoint.y - 33 - player.speed) < playerWall.path[i].y) {
-                        if (sgn(player.actualPoint.x - playerWall.path[i].x) != sgn(player.actualPoint.x - playerWall.path[i - 1].x))
-                            return true
+                if ((player.actualPoint.y - 33) > path[i].y) {
+                    if ((player.actualPoint.y - 33 - player.speed) < path[i].y) {
+                        if (sgn(player.actualPoint.x - path[i].x) != sgn(player.actualPoint.x - path[i - 1].x))
+                            return true;
                     }
                 }
             } else if (player.orientation == 2) {
                 //go down
-                if ((player.actualPoint.y + 33) < playerWall.path[i].y) {
-                    if ((player.actualPoint.y + 33 + player.speed) > playerWall.path[i].y) {
-                        if (sgn(player.actualPoint.x - playerWall.path[i].x) != sgn(player.actualPoint.x - playerWall.path[i - 1].x))
-                            return true
+                if ((player.actualPoint.y + 33) < path[i].y) {
+                    if ((player.actualPoint.y + 33 + player.speed) > path[i].y) {
+                        if (sgn(player.actualPoint.x - path[i].x) != sgn(player.actualPoint.x - path[i - 1].x))
+                            return true;
                     }
                 }
             }
